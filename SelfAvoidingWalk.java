@@ -1,10 +1,15 @@
 public class SelfAvoidingWalk {
     
-    public static boolean walk(int dim){
+    public static int[] walk(int dim){
 
         boolean[][] map = new boolean[dim][dim];
         int x = dim/2;
         int y = dim/2;
+        int dist = 0;
+        int farRight = x;
+        int farLeft = x;
+        int top = y;
+        int bot = y;
         while(x<dim && x>=0 && y<dim && y>=0 && map[y][x]==false){
             map[y][x] = true;
             double direction = Math.random();
@@ -16,14 +21,28 @@ public class SelfAvoidingWalk {
                 x-= 1;
             }else{
                 x+=1;
-            } 
+            }
+            dist++;
+            if (x>farRight){
+                farRight = x;
+            }
+            if (x<farLeft){
+                farLeft = x;
+            }
+            if (y<top){
+                top = y;
+            }
+            if(y>bot){
+                bot = y;
+            }
+             
         
         
         }
         if (x>=dim || x<0 || y>=dim || y<0){
-            return true;
+            return new int[] {1,dist};
         }else{
-            return false;
+            return new int[] {0,dist,farRight,farLeft,top,bot};
         }
 
     }
@@ -31,36 +50,49 @@ public class SelfAvoidingWalk {
 
 
     public static void printPathLengths(int dim, int nTrials){
-
-        boolean[][] map = new boolean[dim][dim];
-        int x = dim/2;
-        int y = dim/2;
-        int dist = 0;
-        int deadEnds = 0;
-        for (int i = 0; i<nTrials;i++){
-            while(x<dim && x>=0 && y<dim && y>=0 && map[y][x]==false){
-                map[y][x] = true;
-                double direction = Math.random();
-                if (direction<0.25){
-                    y-=1;
-                }else if (direction<0.5){
-                    y+= 1;
-                }else if (direction<0.75){
-                    x-= 1;
-                }else{
-                   x+=1;
-                }
-                dist++; 
-        
+        int totalDistDead = 0;
+        int totalDistEscape = 0;
+        int numEscapes = 0;
+        int numDeadEnds = 0;
+        for(int i = 0; i<nTrials;i++){
+            int[] walkResults = walk(dim);
+            if (walkResults[0]==0){
+                numDeadEnds ++;
+                totalDistDead+= walkResults[1];
+            }else{
+                totalDistEscape += walkResults[1];
+                numEscapes ++;
+            }
         }
-        if(x>=0 && x<dim && y>=0 && y<dim){
-            deadEnds++;
-        }
+        System.out.println((double)totalDistDead/numDeadEnds);
+        System.out.println((double)totalDistEscape/numEscapes);
+        System.out.println((double)numDeadEnds/nTrials);
     }
-    System.out.println((double)dist/nTrials);
-    System.out.println((double)deadEnds/nTrials);
+
+
+    public static double deadEndRectangleArea(int n, int nTrials){
+        double totalArea=0;
+        int numDeadEnds = 0;
+        while(numDeadEnds<nTrials){
+            int[] walkResults = walk(n);
+            if (walkResults[0] == 0){
+                numDeadEnds++;
+                int farRight = walkResults[2];
+                int farLeft = walkResults[3];
+                int top = walkResults[4];
+                int bot = n/walkResults[5];
+                double area = (Math.abs((double)farRight-farLeft)+1)*((Math.abs((double)top-bot)+1));
+                System.out.println(area);
+                totalArea += area;
+            }
+            return ((double)totalArea/nTrials); 
+        }
+        
         
 
+
+
+        return (totalArea/nTrials);
     }
 
 
@@ -77,7 +109,8 @@ public class SelfAvoidingWalk {
         System.out.println((double)escaped/trials);
         */
 
-        printPathLengths(5,100);
+        printPathLengths(5,100000);
+        System.out.println(deadEndRectangleArea(5,100000));
 
     }
 }
