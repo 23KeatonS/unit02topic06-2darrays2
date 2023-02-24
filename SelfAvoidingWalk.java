@@ -73,27 +73,29 @@ public class SelfAvoidingWalk {
     public static double deadEndRectangleArea(int n, int nTrials){
         double totalArea=0;
         int numDeadEnds = 0;
-        while(numDeadEnds<nTrials){
-            int[] walkResults = walk(n);
+        for (int i =0;i<nTrials;i++){
+            int [] walkResults = walk(5);
             if (walkResults[0] == 0){
-                numDeadEnds++;
                 int farRight = walkResults[2];
                 int farLeft = walkResults[3];
                 int top = walkResults[4];
-                int bot = n/walkResults[5];
-                double area = (Math.abs((double)farRight-farLeft)+1)*((Math.abs((double)top-bot)+1));
-                System.out.println(area);
-                totalArea += area;
+                int bot = walkResults[5];
+                numDeadEnds++;
+                double area = ((Math.abs(farRight-farLeft)+1)*(Math.abs(top-bot)+1));
+                totalArea+= area;
             }
-            return ((double)totalArea/nTrials); 
         }
+        return(totalArea/numDeadEnds);
+        }
+    
         
         
 
 
 
-        return (totalArea/nTrials);
-    }
+ 
+    
+
 
 
     
@@ -114,3 +116,4 @@ public class SelfAvoidingWalk {
 
     }
 }
+
