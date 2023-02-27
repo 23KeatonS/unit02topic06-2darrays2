@@ -107,9 +107,18 @@ public class Minesweeper {
 
     public static void main(String[] args) {
         boolean[][] bruhBoard = makeMinesweeperBoard(3,5,0.5);
-        printMinesweeperBoard(bruhBoard);
+        //printMinesweeperBoard(bruhBoard);
+        //System.out.println();
+        //printNeighborBoard(makeNeighborBoard(bruhBoard));
+        boolean[][] array = {
+        {false,false,true,true,true},
+        {false,true,false,true,false},
+        {true,false,false,true,false}
+        };
+        printMinesweeperBoard(array);
         System.out.println();
-        printNeighborBoard(makeNeighborBoard(bruhBoard));
+        printNeighborBoard(makeNeighborBoard(array));
+
 
     }
 }
