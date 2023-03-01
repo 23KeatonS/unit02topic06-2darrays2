@@ -31,62 +31,42 @@ public class Minesweeper {
         int [][] neighborBoard = new int[mineBoard.length][mineBoard[0].length];
         
         
-        for (int r = 0;r<mineBoard.length;r++){
+        for (int r = 0; r<mineBoard.length;r++){
             for (int c = 0; c<mineBoard[0].length;c++){
-                if(mineBoard[r][c] == true){
-                    neighborBoard[r][c] = -1;
-                }else{
-                    int bombCount = 0;
-                    if (r>0){
-                        if (c>0){
-                            if (mineBoard[r][c-1]){
-                                bombCount++;
-                            }
-                            if (mineBoard[r-1][c-1]){
-                                bombCount++;
-                            }
-                        }
-                        if (c<mineBoard[0].length-1){
-                            if(mineBoard[r][c+1]){
-                                bombCount++;
-                            }
-                            if(mineBoard[r-1][c+1]){
-                                bombCount++;
-                            }
-                        }
-                        if(mineBoard[r-1][c]){
-                            bombCount++;
-                        }
-                    }else{
-                        if(r<mineBoard.length-1){
-                            if (c>0){
-                                if (mineBoard[r][c-1]){
-                                    bombCount++;
-                                }
-                                if (mineBoard[r+1][c-1]){
-                                    bombCount++;
-                                }
-                            }
-                            if (c<mineBoard[0].length-1){
-                                if(mineBoard[r][c+1]){
-                                    bombCount++;
-                                }
-                                if(mineBoard[r+1][c+1]){
-                                    bombCount++;
-                                }
-                            }
-                            if(mineBoard[r+1][c]){
-                                bombCount++;
-                            }
-                        }
 
+                if(mineBoard[r][c]){
+                    neighborBoard[r][c] = -1;
+                    if(r<mineBoard.length-1 && neighborBoard[r+1][c]!= -1){
+                        neighborBoard[r+1][c]++;
                     }
-                    
-                    
-                    neighborBoard[r][c] = bombCount;
+                    if(r!=0 && neighborBoard[r-1][c]!= -1){
+                        neighborBoard[r-1][c]++;
+                    }
+                    if(r!=0 && c!=0 && neighborBoard[r-1][c-1]!= -1){
+                        neighborBoard[r-1][c-1]++;
+                    }
+                    if(r!=0 && c<mineBoard[r].length && neighborBoard[r-1][c+1]!= -1){
+                        neighborBoard[r-1][c+1]++;
+                    }
+                    if(r<mineBoard.length-1&&c!=0 && neighborBoard[r+1][c-1]!= -1){
+                        neighborBoard[r+1][c-1]++;
+                    }
+                    if(r<mineBoard.length-1&&c<mineBoard[r].length-1 && neighborBoard[r+1][c+1]!= -1){
+                        neighborBoard[r+1][c+1]++;
+                    }
+                    if(c<mineBoard[r].length-1 && neighborBoard[r][c+1]!= -1){
+                        neighborBoard[r][c+1]++;
+                    }
+                    if(c!=0 && neighborBoard[r][c-1]!= -1){
+                        neighborBoard[r][c-1]++;
+                    }
                 }
+
+
+                }  
             }
-        }
+        
+        
         return neighborBoard;
     }
 
@@ -107,17 +87,10 @@ public class Minesweeper {
 
     public static void main(String[] args) {
         boolean[][] bruhBoard = makeMinesweeperBoard(3,5,0.5);
-        //printMinesweeperBoard(bruhBoard);
-        //System.out.println();
-        //printNeighborBoard(makeNeighborBoard(bruhBoard));
-        boolean[][] array = {
-        {false,false,true,true,true},
-        {false,true,false,true,false},
-        {true,false,false,true,false}
-        };
-        printMinesweeperBoard(array);
+        printMinesweeperBoard(bruhBoard);
         System.out.println();
-        printNeighborBoard(makeNeighborBoard(array));
+        printNeighborBoard(makeNeighborBoard(bruhBoard));
+
 
 
     }
